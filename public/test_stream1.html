@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+</head>
+<body class="login bg-blue">
+    <input id="files" type="file" name="files[]" accept="audio/*" multiple onchange="handleFilesSelect(this)" />
+    <div id="div"></div>
+
+    <button id="run">Run</button>
+
+    <br/><br /><br />
+
+    <button id="record">Rcrd</button>
+    <button id="stop">Stp</button>
+
+
+
+<script>
+
+
+  var players = []
+  var chunks = [];
+  var div = document.getElementById('div')  
+  var streams = [];
+  var description = "";
+  var recorder = null;
+  var mergedStream = null;
+  var player12 = new Audio();
+  //var audioContext = new AudioContext();
+
+
+  var record = document.getElementById('record')
+  var stop = document.getElementById('stop')
+  var runBtn = document.getElementById('run');
+
+  runBtn.addEventListener('click', function () {
+    filePlayer("SampleAudio_0.7mb.mp3");
+    filePlayer("SampleAudio_0.4mb.mp3");
+    filePlayer("file_example_MP3_1MG.mp3");
+  })
+
+  record.addEventListener('click', function(){
+    startRcrd();
+  })
+
+  stop.addEventListener('click', function () {
+    stopRecord()
+  })
+
+  function filePlayer(fileName) {
+    var player = new Audio();
+    player.controls = "controls";
+    players.push(player);
+    player.src = fileName;
+
+    player.play();
+    player.onplay = function () {
+      var stream = player.captureStream();
+      streams.push(stream);      
+    }
+
+
+  }
+
+  function stopRecord() {
+    recorder.stop();
+  }
+
+  function startRcrd() {
+      //var stream = streams[0];
+      recorder = new MediaRecorder(mix());
+      recorder.start(0);
+
+      recorder.ondataavailable = function (event) {
+        chunks.push(event.data);
+      };
+
+      recorder.onstop = function (event) {
+        var blob = new Blob(chunks, {
+          "type": "audio/ogg; codecs=opus"
+        });
+        console.log("recording complete");
+        prepareForDownload(blob)
+      };
+
+    }
+
+  function prepareForDownload(blob) {
+      div.innerHTML = "mixed audio tracks ready for download..";
+      var audioDownload = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.download = description + "." + blob.type.replace(/.+\/|;.+/g, "");
+      a.href = audioDownload;
+      a.innerHTML = a.download;
+      document.body.appendChild(a);
+      a.insertAdjacentHTML("afterend", "<br>");
+      player12.src = audioDownload;
+      document.body.appendChild(player12);
+    }
+  
+  function mix() {
+      var audioContext = new AudioContext();
+      const dest = audioContext.createMediaStreamDestination();
+      streams.forEach(stream => {
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(dest);
+      });
+      
+      return dest.stream;
+  }
+
+</script>
+
+
+</body>
+</html>

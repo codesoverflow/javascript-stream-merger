@@ -5,7 +5,7 @@ import {
   getFilePlayer,
   getMicStream,
   getFilePlayerStream,
-  awaitForSeconds,
+  
   getMixedStream,
   recordUsingStream
 } from './Utils/Utils'
@@ -15,11 +15,16 @@ const App = () => {
   
   const [selectedFilePlayers, setSelectedFilePlayers] = useState([])
   const [micStream, setMicStream] = useState(null)
-  const [selectedFilePlayerStreams, setSelectedFilePlayerStreams] = useState([])
   const [recordingMeta, setRecordingMeta] = useState({})
-  const recorderRef = useRef(null)
+  
+  const recordData = useRef({
+    recorder: null,
+    selectedFilePlayerStreams: []
+  }).current
 
-  const allStreams = [...selectedFilePlayerStreams, micStream].filter(stream => !!stream)
+  const allStreams = [...recordData.selectedFilePlayerStreams, micStream].filter(stream => !!stream)
+
+  
 
   const handleFilesSelection = (event) => {
     const file = event.target.files[0];
@@ -41,19 +46,17 @@ const App = () => {
     const startRecording = async () => {
       for (let selectedFilePlayer of selectedFilePlayers) {
         const filePlayerStream = await getFilePlayerStream(selectedFilePlayer)
-        setSelectedFilePlayerStreams([...selectedFilePlayerStreams, filePlayerStream])
+        recordData.selectedFilePlayerStreams.push(filePlayerStream)
       }
-      await awaitForSeconds()
-
+    
+      const allStreams = [...recordData.selectedFilePlayerStreams, micStream].filter(stream => !!stream)
       
-      const allStreams = [...selectedFilePlayerStreams, micStream].filter(stream => !!stream)
-      debugger
       if (!allStreams.length) {
         return
       }
       const mixedStream = getMixedStream(allStreams)
 
-      recorderRef.current = recordUsingStream({
+      recordData.recorder = recordUsingStream({
         stream: mixedStream,
         onRecorderStop: (recordedMeta) => {
           setRecordingMeta(recordedMeta)
@@ -65,9 +68,10 @@ const App = () => {
   }
 
   const handleStopRecording = () => {
-    if(recorderRef.current ) {
-      recorderRef.current.stop()
-      selectedFilePlayers.forEach(player => player.stop())
+    if(recordData.recorder ) {
+      recordData.recorder.stop()
+      //setSelectedFilePlayers([])
+      selectedFilePlayers.forEach(player => player.pause())
     }
   }
 

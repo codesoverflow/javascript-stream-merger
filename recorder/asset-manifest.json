@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/wp-content/uploads/recorder/static/css/main.76ff40f4.chunk.css",
+    "main.js": "/wp-content/uploads/recorder/static/js/main.d62e7d35.chunk.js",
+    "main.js.map": "/wp-content/uploads/recorder/static/js/main.d62e7d35.chunk.js.map",
+    "runtime-main.js": "/wp-content/uploads/recorder/static/js/runtime-main.a6d167b6.js",
+    "runtime-main.js.map": "/wp-content/uploads/recorder/static/js/runtime-main.a6d167b6.js.map",
+    "static/js/2.364d5834.chunk.js": "/wp-content/uploads/recorder/static/js/2.364d5834.chunk.js",
+    "static/js/2.364d5834.chunk.js.map": "/wp-content/uploads/recorder/static/js/2.364d5834.chunk.js.map",
+    "index.html": "/wp-content/uploads/recorder/index.html",
+    "precache-manifest.282f209c2c767880e098d680b774b200.js": "/wp-content/uploads/recorder/precache-manifest.282f209c2c767880e098d680b774b200.js",
+    "service-worker.js": "/wp-content/uploads/recorder/service-worker.js",
+    "static/css/main.76ff40f4.chunk.css.map": "/wp-content/uploads/recorder/static/css/main.76ff40f4.chunk.css.map",
+    "static/js/2.364d5834.chunk.js.LICENSE.txt": "/wp-content/uploads/recorder/static/js/2.364d5834.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a6d167b6.js",
+    "static/js/2.364d5834.chunk.js",
+    "static/css/main.76ff40f4.chunk.css",
+    "static/js/main.d62e7d35.chunk.js"
+  ]
+}

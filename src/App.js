@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './App.css';
 
 import {
@@ -16,6 +16,11 @@ const App = () => {
   const [selectedFilePlayers, setSelectedFilePlayers] = useState([])
   const [micStream, setMicStream] = useState(null)
   const [recordingMeta, setRecordingMeta] = useState({})
+  const [recordings, setRecordings] = useState([])
+
+  useEffect(() => {
+
+  }, [])
   
   const recordData = useRef({
     recorder: null,
@@ -59,7 +64,7 @@ const App = () => {
       recordData.recorder = recordUsingStream({
         stream: mixedStream,
         onRecorderStop: (recordedMeta) => {
-          setRecordingMeta(recordedMeta)
+          //setRecordingMeta(recordedMeta)
         }
       })
     }
@@ -115,9 +120,20 @@ const App = () => {
   </>
   }
 
-  {recordingMeta.audioDownload && 
+  { false && recordingMeta.audioDownload && 
   <button type="button" onClick={handlePlayingRecordedAudio} >
   Play Recorded</button>}
+
+
+  <div>
+    <ul>
+      {recordings.map(recording => {
+        return <li>
+          {recording}
+        </li>
+      })}
+    </ul>
+  </div>
 
 
   </div>

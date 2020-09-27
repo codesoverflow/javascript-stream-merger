@@ -1,26 +1,22 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import './App.css';
 
 import {
   getFilePlayer,
   getMicStream,
   getFilePlayerStream,
-  
   getMixedStream,
   recordUsingStream
 } from './Utils/Utils'
+
+import PlayerList from './Components/PlayerList'
 
 
 const App = () => {
   
   const [selectedFilePlayers, setSelectedFilePlayers] = useState([])
   const [micStream, setMicStream] = useState(null)
-  const [recordingMeta, setRecordingMeta] = useState({})
-  const [recordings, setRecordings] = useState([])
-
-  useEffect(() => {
-
-  }, [])
+  
   
   const recordData = useRef({
     recorder: null,
@@ -30,7 +26,6 @@ const App = () => {
   const allStreams = [...recordData.selectedFilePlayerStreams, micStream].filter(stream => !!stream)
 
   
-
   const handleFilesSelection = (event) => {
     const file = event.target.files[0];
     const player = getFilePlayer(URL.createObjectURL(file))
@@ -63,7 +58,7 @@ const App = () => {
 
       recordData.recorder = recordUsingStream({
         stream: mixedStream,
-        onRecorderStop: (recordedMeta) => {
+        onRecorderStop: () => {
           //setRecordingMeta(recordedMeta)
         }
       })
@@ -78,12 +73,6 @@ const App = () => {
       //setSelectedFilePlayers([])
       selectedFilePlayers.forEach(player => player.pause())
     }
-  }
-
-  const handlePlayingRecordedAudio = () => {
-    const recordingPlayer = new Audio();
-    recordingPlayer.src = recordingMeta.audioDownload;
-    recordingPlayer.play()
   }
 
 
@@ -120,21 +109,8 @@ const App = () => {
   </>
   }
 
-  { false && recordingMeta.audioDownload && 
-  <button type="button" onClick={handlePlayingRecordedAudio} >
-  Play Recorded</button>}
-
-
-  <div>
-    <ul>
-      {recordings.map(recording => {
-        return <li>
-          {recording}
-        </li>
-      })}
-    </ul>
-  </div>
-
+  
+  <PlayerList />
 
   </div>
 }

@@ -73,7 +73,7 @@ export const recordUsingStream = ({
   return recorder
 }
 
-export const playRecording = (recordingId) => {
+export const getRecording = (recordingId) => {
   const chunksFromLocalStorage = getFromLocalStorage(recordingId)
 
   const blob = new Blob(chunksFromLocalStorage, {
@@ -102,6 +102,19 @@ const getFromLocalStorage = (recordingId) => {
 
 const saveInLocalStorage = (recordingId, serializedChunks) => {
   localStorage.setItem(recordingId, serializedChunks)
+}
+
+export function getAllStorage() {
+
+  // var values = [],
+  //   keys = Object.keys(localStorage),
+  //   i = keys.length;
+
+  // while (i--) {
+  //   values.push(localStorage.getItem(keys[i]));
+  // }
+
+  return Object.keys(localStorage);
 }
 
 const getDeserilizedChunks = (stringifiedArray) => {
